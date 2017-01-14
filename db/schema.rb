@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(:version => 20130102225500) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "queue"
+    t.string   "unique_hash"
   end
 
   create_table "deleted_users", :force => true do |t|
