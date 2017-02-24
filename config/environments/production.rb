@@ -1,7 +1,6 @@
 Inaturalist::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
-  config.force_ssl = true
-
+  #
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
   config.cache_classes = true
@@ -71,7 +70,7 @@ Inaturalist::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  
+
   config.middleware.use Rack::GoogleAnalytics, :trackers => lambda { |env|
     return env['inat_ga_trackers'] if env['inat_ga_trackers']
   }
