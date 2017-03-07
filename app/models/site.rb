@@ -126,7 +126,7 @@ class Site < ActiveRecord::Base
   end
 
   validates_attachment_content_type :stylesheet, content_type: [
-    "text/css", 
+    "text/css",
     # Not great, but probably ok here where only site admins can add the file.
     # Underlying problem is that we force all validations to depend on the file
     # commant (see paperclip initializer) and it reads CSS as plain/text
