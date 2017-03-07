@@ -56,14 +56,14 @@ class Site < ActiveRecord::Base
       :bucket => CONFIG.s3_bucket,
       :path => "sites/:id-logo.:extension",
       :url => ":s3_alias_url",
-      :default_url => "/assets/logo-small.gif"
+      :default_url => "/assets/logo-small.png"
   else
     has_attached_file :logo,
       :path => ":rails_root/public/attachments/sites/:id-logo.:extension",
       :url => "#{ CONFIG.attachments_host }/attachments/sites/:id-logo.:extension",
-      :default_url => FakeView.image_url("logo-small.gif")
+      :default_url => FakeView.image_url("logo-small.png")
   end
-  validates_attachment_content_type :logo, :content_type => [/jpe?g/i, /png/i, /gif/i, /octet-stream/], 
+  validates_attachment_content_type :logo, :content_type => [/jpe?g/i, /png/i, /gif/i, /octet-stream/],
     :message => "must be JPG, PNG, or GIF"
 
   # large square branding image that appears on pages like /login. Should be 300 px wide and about that tall
@@ -83,7 +83,7 @@ class Site < ActiveRecord::Base
       :url => "#{ CONFIG.attachments_host }/attachments/sites/:id-logo_square.:extension",
       :default_url => FakeView.image_url("bird.png")
   end
-  validates_attachment_content_type :logo_square, :content_type => [/jpe?g/i, /png/i, /gif/i, /octet-stream/], 
+  validates_attachment_content_type :logo_square, :content_type => [/jpe?g/i, /png/i, /gif/i, /octet-stream/],
     :message => "must be JPG, PNG, or GIF"
 
   # large square branding image that appears on pages like /login. Should be 300 px wide and about that tall
@@ -104,7 +104,7 @@ class Site < ActiveRecord::Base
       :default_url => FakeView.image_url("inat_email_banner.png")
   end
   validates_attachment_content_type :logo_email_banner, :content_type => [/jpe?g/i, /png/i, /gif/i, /octet-stream/], :message => "must be JPG, PNG, or GIF"
-      
+
   # CSS file to override default styles
   if Rails.env.production?
     has_attached_file :stylesheet,
@@ -128,7 +128,7 @@ class Site < ActiveRecord::Base
 
   # URL where visitors can get help using the site
   preference :help_url, :string, :default => FakeView.wiki_page_url("help")
-  
+
   # URL where visitors can get started using the site
   preference :getting_started_url, :string, :default => FakeView.wiki_page_url("getting+started")
 
