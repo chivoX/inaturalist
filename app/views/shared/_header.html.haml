@@ -2,6 +2,9 @@
 #header.clear
   %ul#logonav
     %li.navtab
+      = image_tag 'logo-miambiente.png'
+  %ul#logonav
+    %li.navtab
       - if @site && !@site.custom_logo.blank?
         =raw @site.custom_logo
       - else
