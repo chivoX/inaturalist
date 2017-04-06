@@ -20,6 +20,7 @@ gem 'bluecloth'
 gem 'bugguide', git: 'git://github.com/kueda/bugguide.git'
 gem 'capistrano3-delayed-job', '~> 1.0'
 gem 'capistrano', '~> 3.7', '>= 3.7.1'
+gem 'capistrano-nvm', '~> 0.0.6', require: false
 gem 'capistrano-rails', '~> 1.2'
 gem 'capistrano-rails-db'
 gem 'rake', '10.5.0'
