@@ -4,7 +4,7 @@ module Shared::LicenseModule
 
   CC_VERSION = "4.0"
   CC0_VERSION = "1.0"
-  
+
   LICENSE_INFO = {
     0 => {code: "C",                       short: "(c)",          name: "Copyright", url: "http://en.wikipedia.org/wiki/Copyright"},
     1 => {code: Observation::CC_BY_NC_SA,  short: "CC BY-NC-SA",  name: "Creative Commons Attribution-NonCommercial-ShareAlike License", url: "http://creativecommons.org/licenses/by-nc-sa/#{CC_VERSION}/"},
@@ -67,19 +67,19 @@ module Shared::LicenseModule
   def license_short
     LICENSE_INFO[license.to_i].try(:[], :short)
   end
-  
+
   def license_name
     LICENSE_INFO[license.to_i].try(:[], :name)
   end
-  
+
   def license_code
     LICENSE_INFO[license.to_i].try(:[], :code)
   end
-  
+
   def license_url
-    self.license_url_for_number( license )
+    LocalPhoto.license_url_for_number( license )
   end
-  
+
   def copyrighted?
     license.to_i < PD
   end
@@ -91,7 +91,7 @@ module Shared::LicenseModule
   def some_rights_reserved?
     license.to_i > COPYRIGHT && license < PD
   end
-  
+
   def creative_commons?
     CC_LICENSES.include?( license.to_i )
   end
@@ -106,7 +106,7 @@ module Shared::LicenseModule
       return COPYRIGHT if code.blank?
       LICENSE_INFO.detect{|k,v| v[:code] == code}.try(:first)
     end
-    
+
     def license_code_for_number(number)
       LICENSE_INFO[number].try(:[], :code)
     end
