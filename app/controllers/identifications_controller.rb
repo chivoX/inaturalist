@@ -7,7 +7,7 @@ class IdentificationsController < ApplicationController
   blocks_spam :only => load_only, :instance => :identification
   before_filter :require_owner, :only => [:edit, :update, :destroy]
   cache_sweeper :comment_sweeper, :only => [:create, :update, :destroy, :agree]
-  caches_action :bold, :expires_in => 6.hours, :cache_path => Proc.new {|c| 
+  caches_action :bold, :expires_in => 6.hours, :cache_path => Proc.new {|c|
     c.params.merge(:sequence => Digest::MD5.hexdigest(c.params[:sequence]))
   }
 
@@ -49,11 +49,11 @@ class IdentificationsController < ApplicationController
       format.html { render layout: "bootstrap" }
     end
   end
-    
+
   def show
     redirect_to observation_url(@identification.observation, :anchor => "identification-#{@identification.id}")
   end
-  
+
   def by_login
     block_if_spammer(@selected_user) && return
     params[:page] = params[:page].to_i
@@ -76,6 +76,7 @@ class IdentificationsController < ApplicationController
       size: limited_per_page,
       from: (params[:page] - 1) * limited_per_page,
       sort: { "non_owner_ids.created_at": {
+        unmapped_type: "long",
         order: "desc",
         mode: "max",
         nested_path: "non_owner_ids",
@@ -124,7 +125,7 @@ class IdentificationsController < ApplicationController
         render json: @identifications.as_json( include: [
           {
             taxon: taxon_options
-          }, 
+          },
           {
             observation: {
               only: [:id, :species_guess],
@@ -142,7 +143,7 @@ class IdentificationsController < ApplicationController
       end
     end
   end
-  
+
   # POST identification_url
   def create
     @identification = Identification.new(params[:identification])
@@ -151,7 +152,7 @@ class IdentificationsController < ApplicationController
       taxon_name = TaxonName.find_by_name(params[:taxa_search_form_taxon_name])
       @identification.taxon = taxon_name.taxon if taxon_name
     end
-    
+
     respond_to do |format|
       duplicate_key_violation = false
       begin
@@ -168,12 +169,12 @@ class IdentificationsController < ApplicationController
           end
           redirect_to @identification.observation and return
         end
-        
+
         format.json do
           Observation.refresh_es_index
           @identification.html = view_context.render_in_format(:html, :partial => "identifications/identification")
           render :json => @identification.to_json(
-            :methods => [:html], 
+            :methods => [:html],
             :include => {
               :observation => {:methods => [:iconic_taxon_name]}
             }
@@ -188,18 +189,18 @@ class IdentificationsController < ApplicationController
           redirect_to @identification.observation || root_url
           return
         end
-        
+
         format.json do
           render :status => :unprocessable_entity, :json => {:errors => @identification.errors.full_messages }
         end
       end
     end
   end
-  
+
   def edit
     render layout: "bootstrap"
   end
-  
+
   def update
     if @identification.update_attributes(params[:identification])
       msg = t(:identification_updated)
@@ -226,7 +227,7 @@ class IdentificationsController < ApplicationController
       end
     end
   end
-  
+
 
   # DELETE identification_url
   def destroy
@@ -255,7 +256,7 @@ class IdentificationsController < ApplicationController
       end
     end
   end
-  
+
 ## Custom actions ############################################################
 
   # Agree with an identification
@@ -274,7 +275,7 @@ class IdentificationsController < ApplicationController
         :observation_id => params[:observation_id]
       )
     end
-    
+
     respond_to do |format|
       duplicate_key_violation = false
       begin
@@ -311,9 +312,9 @@ class IdentificationsController < ApplicationController
       format.xml { render :xml => xml }
     end
   end
-  
+
   private
-  
+
   def agree_respond_to_html
     flash[:notice] = t(:identification_saved)
     if params[:return_to]
@@ -321,7 +322,7 @@ class IdentificationsController < ApplicationController
     end
     redirect_to @identification.observation
   end
-  
+
   def agree_respond_to_html_failure
     flash[:error] = t(:there_was_a_problem_saving_your_identification, :error => @identification.errors.full_messages.join(', '))
     if params[:return_to]
@@ -329,11 +330,11 @@ class IdentificationsController < ApplicationController
     end
     redirect_to @identification.observation
   end
-  
+
   def load_identification
     render_404 unless @identification = Identification.find_by_id(params[:id])
   end
-  
+
   def require_owner
     unless logged_in? && @identification.user_id == current_user.id
       redirect_to_hell
